@@ -1,0 +1,74 @@
+spring:
+  datasource:
+    # ⚠️ 로컬 MySQL 연결 설정 - 본인 환경에 맞게 수정하세요
+    url: jdbc:mysql://localhost:3306/busnow_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: root          # 본인 MySQL 계정으로 변경
+    password: root # 본인 MySQL 비밀번호로 변경
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      pool-name: BusNow-HikariPool
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate          # 운영 환경: validate / 최초 개발 시: create
+    properties:
+      hibernate:
+        # ✅ 핵심: 자동 snake_case 변환 차단 → DB 컬럼명 그대로 사용
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        show_sql: false           # 운영 환경: false / 개발 시: true
+        use_sql_comments: false
+        jdbc:
+          batch_size: 100         # JdbcTemplate batchUpdate 배치 사이즈
+          order_inserts: true
+          order_updates: true
+    open-in-view: false           # OSIV 비활성화 (LazyLoading 범위 명시적 제어)
+
+  mybatis:
+    mapper-locations: classpath:mapper/**/*.xml
+    type-aliases-package: com.busnow.entity
+    configuration:
+      map-underscore-to-camel-case: false  # ✅ snake_case 자동 변환 차단
+      default-fetch-size: 100
+      default-statement-timeout: 30
+      log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+  jackson:
+    default-property-inclusion: non_null # null 값은 응답에서 제외 (선택 사항)
+
+# JWT 설정
+jwt:
+  secret: busnow-jwt-super-secret-key-2024-must-be-at-least-256-bits-long-for-hs256-algorithm
+  access-token-expiration: 1800000    # 30분 (밀리초)
+  refresh-token-expiration: 604800000 # 7일 (밀리초)
+
+# 국토교통부 외부 API 설정
+external:
+  api:
+    service-key: "33abc3e59458035d64a35b6d4c392f1c565c761b6f32a8a252bd45cb282b1f17"  # data.go.kr에서 발급받은 인증키로 교체
+    arrival-url: "http://apis.data.go.kr/1613000/ArvlInfoInqireService/getSttnAcctoArvlPrearngeInfoList"
+    # [신규] 정류소 검색 API URL
+    stop-search-url: "http://apis.data.go.kr/1613000/BusSttnInfoInqireService/getSttnNoList"
+    timeout: 20000  # ms (20초로 대폭 증설)
+
+# 서버 포트
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# 로깅 설정
+logging:
+  level:
+    com.busnow: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
