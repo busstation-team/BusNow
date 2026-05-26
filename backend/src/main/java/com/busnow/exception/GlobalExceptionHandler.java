@@ -21,7 +21,7 @@ import java.util.Map;
  * @RestControllerAdvice: @ControllerAdvice + @ResponseBody 조합.
  * 모든 @RestController에서 발생하는 예외를 일관된 JSON 형식으로 변환.
  *
- *  응답 형식:
+ * ✅ 응답 형식:
  *    {
  *      "timestamp": "2024-01-01T00:00:00",
  *      "status": 400,

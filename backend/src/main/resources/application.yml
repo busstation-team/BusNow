@@ -18,7 +18,7 @@ spring:
       ddl-auto: validate          # 운영 환경: validate / 최초 개발 시: create
     properties:
       hibernate:
-        #  핵심: 자동 snake_case 변환 차단 → DB 컬럼명 그대로 사용
+        # ✅ 핵심: 자동 snake_case 변환 차단 → DB 컬럼명 그대로 사용
         physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
@@ -34,7 +34,7 @@ spring:
     mapper-locations: classpath:mapper/**/*.xml
     type-aliases-package: com.busnow.entity
     configuration:
-      map-underscore-to-camel-case: false  #  snake_case 자동 변환 차단
+      map-underscore-to-camel-case: false  # ✅ snake_case 자동 변환 차단
       default-fetch-size: 100
       default-statement-timeout: 30
       log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
