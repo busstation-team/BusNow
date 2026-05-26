@@ -1,0 +1,7 @@
+.env
+node_modules/
+application-secret.yml
+target/
+build/
+.idea/
+.vscode/
