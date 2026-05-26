@@ -5,12 +5,3 @@ target/
 build/
 .idea/
 .vscode/
-# Added from local
-
-.env
-node_modules/
-application-secret.yml
-target/
-build/
-.idea/
-.vscode/
